@@ -7,10 +7,13 @@ import { saveAndDispatch } from "../data/DB";
 import { HomeCard } from '../components/HomeCard'
 import { Card, Button, Icon, Image } from '@rneui/themed';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 
-function HomeScreen() {
+
+function HomeScreen({navigation}) {
     const listItems = useSelector((state) => state.listItems);
     const dispatch = useDispatch();
 
@@ -41,9 +44,13 @@ function HomeScreen() {
                                 {item.price}
                             </Text>
                             <Button
+                            onPress={async () => {
+                                navigation.navigate('ProductDetailScreen');
+                            }}
                                 icon={<Icon name='code' color='#ffffff' />}
                                 buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                                 title='VIEW NOW' />
+                                
                         </Card>
                     );
                 }
