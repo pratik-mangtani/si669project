@@ -6,7 +6,7 @@ import {
 } from 'firebase/firestore';
 
 import { firebaseConfig } from '../Secret';
-import {  LOAD_ITEMS} from '../data/Reducer';
+import {  LOAD_ITEMS, LOAD_USERS } from '../data/Reducer';
 
 let app, db = undefined;
 const COLLNAME = 'furnitureCollection';
@@ -32,11 +32,29 @@ const loadItemsAndDispatch = async (action, dispatch) => {
     dispatch(newAction);
 }
 
+const loadUsersAndDispatch = async (action, dispatch) => {
+    const querySnap = await getDocs(collection(db, 'users'));
+    let newUsers = [];
+    querySnap.forEach(docSnap => {
+        let newUser = docSnap.data();
+        newUser.key = docSnap.id;
+        newUsers.push(newUser);
+    });
+    let newAction = {
+        ...action,
+        payload: { newUsers }
+    };
+    dispatch(newAction);
+}
+
 const saveAndDispatch = async (action, dispatch) => {
     const { type, payload } = action;
     switch (type) {
         case LOAD_ITEMS:
             loadItemsAndDispatch(action, dispatch);
+            return;
+        case LOAD_USERS:
+            loadUsersAndDispatch(action, dispatch);
             return;
         default:
             return;
