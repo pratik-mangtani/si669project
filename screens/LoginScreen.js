@@ -26,6 +26,7 @@ function SigninBox({navigation}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   return (
     <View style={styles.loginContainer}>
@@ -168,7 +169,7 @@ function LoginScreen({navigation}) {
         navigation.navigate('Login');
       }
     })
-  }, []);
+  },[]);
 
   return (
     <View style={styles.container}>

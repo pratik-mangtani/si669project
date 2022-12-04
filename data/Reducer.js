@@ -4,7 +4,8 @@ const LOAD_USERS = 'LOAD_USERS';
 
 const initialState = {
     listItems: null,
-    users: null
+    users: null,
+    currentUser: null
   }
 
   const loadItems = (state, newListItems) => {

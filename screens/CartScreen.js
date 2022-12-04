@@ -7,6 +7,7 @@ import { firebaseConfig } from '../Secret';
 import { useEffect, useState } from 'react';
 import { SelectList } from 'react-native-dropdown-select-list';
 
+
 let app;
 const apps = getApps();
 
@@ -19,7 +20,7 @@ if (apps.length == 0) {
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-function ProductDetailScreen({navigation}) {
+function CartScreen({navigation}) {
   const [displayName, setDisplayName] = useState('');
   //const [currentItem, setCurrentItem] = useState(auth.currentUser?.uid);
   const [currentItem, setCurrentItem] = useState('4bT0e8GZVUgRzQq0jjGi');
@@ -28,6 +29,15 @@ function ProductDetailScreen({navigation}) {
   const [imageURL, setImageURL] = useState('');
   const [favorited, setFavorited] = useState('0');
 
+  const [selected, setSelected] = useState("");
+  
+  const data = [
+      {key:'0', value:'0', disabled:false},
+      {key:'1', value:'1', disabled:false},
+      {key:'2', value:'2'},
+      {key:'3', value:'3'},
+      {key:'4', value:'4', disabled:false},
+  ]
     // ♥
   // ♡
 
@@ -58,6 +68,9 @@ function ProductDetailScreen({navigation}) {
           Back
         </Button>
       </View>
+      <View>
+        <Text>Cart Screen</Text>
+      </View>
 
       <View style={styles.listContainer}>
         <FlatList
@@ -65,10 +78,8 @@ function ProductDetailScreen({navigation}) {
           renderItem={({item}) => {
             {setImageURL(item.imageURL);}
             return (
-                <View>
-                    <View style={styles.title}>
-                        <Text style={{fontSize: 24}}>{item.name}</Text>
-                    </View>
+                <View style={styles.cartListing}>
+                    
                     <View style={styles.imageContainer}>
                         <Image
                         style={styles.image}
@@ -76,16 +87,18 @@ function ProductDetailScreen({navigation}) {
                     {console.log('imageURL:')}
                     {console.log(imageURL)}
                     </View>
-                    <View style={styles.buttonContainer}>
-                        <Button style={styles.button}>Add to Cart</Button>
-                        
-                        <Button onPress={async () => { setFavorited('1'); if (favorited == '1') {setFavorited('0')} else {setFavorited('1') }}}> {favorited == '1' ? '♥' : '♡' }</Button>
+                    <View style={styles.title}>
+                        <Text style={{fontSize: 20}}>{item.name}</Text>
                     </View>
-                    <View style={styles.body}>
-                        <Text style={[{fontSize: 18}, {paddingTop:10}]}>Item Description</Text>
-                        <Text style={[{fontSize: 14}, {paddingTop:6}]}>{item.description}</Text>
-                        <Text style={[{fontSize: 18}, {paddingTop:10}]}>Price: ${item.price}</Text>
+                    <View style={styles.title}>
+                        <Text style={{fontSize: 20}}>${item.price}</Text>
                     </View>
+                    <SelectList 
+        setSelected={(val) => setSelected(val)} 
+        data={data} 
+        save="value"
+    />
+                    
                 </View>
             );
           }}
@@ -103,12 +116,20 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingTop: 25,
   },
-  title: {
+  cartListing: {
     flex: 1,
     width: '100%',
+    height: 200,
+    backgroundColor: 'red',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10
+
+  },
+  title: {
     paddingTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'left',
+    alignItems: 'left'
   },
   body: {
     flex: 1,
@@ -118,11 +139,13 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   imageContainer: {
-    flex: 1,
-    width: '100%',
-    height: 200,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 3
 
 
   },
@@ -162,4 +185,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ProductDetailScreen;
+export default CartScreen;
