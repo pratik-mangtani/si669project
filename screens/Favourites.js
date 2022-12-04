@@ -26,7 +26,7 @@ export default function Favourites() {
   const loadAction = { type: LOAD_USERS };
   saveAndDispatch(loadAction, dispatch);
 }, []);
-const users = useSelector((state) => state.users);
+//const users = useSelector((state) => state.users);
 //console.log(users)
 const dispatch = useDispatch();
 

@@ -13,6 +13,7 @@ import ProductDetailScreen from './screens/ProductDetailScreen';
 import LoginScreen from './screens/LoginScreen';
 import AboutUs from './screens/AboutUs'
 import Navigation from './screens/Navigation'
+import CartScreen from './screens/CartScreen'
 
 const store = configureStore({
     reducer: rootReducer, 
@@ -29,6 +30,7 @@ const store = configureStore({
             <Tab.Screen name='HomeScreen' component={HomeNavigator}/>
             <Tab.Screen name='Favourites' component={Favourites}/>
             <Tab.Screen name='AboutUs' component={AboutUsNavigator}/>
+            <Tab.Screen name='CartScreen' component={CartScreen}/>
           </Tab.Navigator>
         </NavigationContainer>
       </Provider>

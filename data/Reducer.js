@@ -24,12 +24,13 @@ const loadUsers = (state, newUsers) => {
 }
 
 
-const updateUser = (state, userId, displayName, favorites) => {
+const updateUser = (state, userId, displayName, favorites, cart) => {
   let { users } = state;
   let newUser = {
     key: userId,
     displayName: displayName,
-    favorites: favorites
+    favorites: favorites,
+    cart: cart
 
   };
   let newUsers = users.map(elem => elem.key === userId ? newUser : elem);
@@ -49,7 +50,7 @@ function rootReducer(state = initialState, action) {
     case LOAD_USERS:
         return loadUsers(state, payload.newUsers);
     case UPDATE_USER:
-      return updateUser(state, payload.key, payload.displayName, payload.favorites);
+      return updateUser(state, payload.key, payload.displayName, payload.favorites, payload.cart);
     default:
       return state;
   }

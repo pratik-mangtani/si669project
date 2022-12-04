@@ -2,14 +2,13 @@ import { Button } from '@rneui/themed';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { getAuth, signOut } from 'firebase/auth';
 import { getApps, initializeApp } from 'firebase/app';
-import { onSnapshot, getFirestore, collection } from 'firebase/firestore';
+import { onSnapshot, getFirestore, collection, connectFirestoreEmulator } from 'firebase/firestore';
 import { firebaseConfig } from '../Secret';
 import { useEffect, useState } from 'react';
 import { Card, Icon } from '@rneui/themed';
 import { saveAndDispatch } from '../data/DB';
 import { useSelector, useDispatch } from 'react-redux';
-import { UPDATE_USER } from '../data/Reducer';
-
+import { LOAD_USERS, UPDATE_USER } from '../data/Reducer';
 
 
 let app;
@@ -36,12 +35,26 @@ function ProductDetailScreen({ navigation, route }) {
 
   const userId = "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
 
+  useEffect(() => {
+      const loadAction = { type: LOAD_USERS };
+      saveAndDispatch(loadAction, dispatch);
+  }, []);
+
+  const users = useSelector(state => state.users);
+
+  console.log(users);
+  console.log()
+
+
+
   const user = {
     displayName: "Pratik Mangtani",
     favorites: ["4bT0e8GZVUgRzQq0jjGi"],
+    cart: [{"key":"4bT0e8GZVUgRzQq0jjGi", "quantity":1}],
     uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
   }
-  const [currentUser,setCurrentUser] = useState(user)
+  const [currentUser,setCurrentUser] = useState(user);
+  const [cart, setCart] = useState(user.cart);
   const [favoriteList, setFavoriteList] = useState(user.favorites);
   const listItems = useSelector(state => state.listItems);
   const dispatch = useDispatch();
@@ -68,7 +81,87 @@ function ProductDetailScreen({ navigation, route }) {
             source={{ uri: item.imageURL }} />
         </View>
         <View style={styles.buttonContainer}>
-          <Button style={styles.button}>Add to Cart</Button>
+          <Button style={styles.button}
+            onPress={() => {
+              // setCurrentUser( {
+              //   displayName: "Pratik Mangtani",
+              //   favorites: ["4bT0e8GZVUgRzQq0jjGi","HhCESIRbEIHGTQQyUqMA"],
+              //   uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
+              // })
+              let newCart = [];
+              let newItem = {"key": item.key, "quantity": 1};
+              console.log("ITEM KEY", item.key);
+
+              //const filteredBooks = books.filter(val => val.areas.includes(filterValue));
+              //const testFilter = user.cart.filter(x => x.key == item.key);
+              //console.log("TESTFILTER",testFilter);
+              //user.cart.forEach((x, i) => console.log("ITEM KEY", x.key));
+              let match = false;
+              cart.forEach((x, i) => {
+                // extended version of filter(); checking if item already in cart
+                console.log("TEST", x.key, item.key)
+                if (x.key == item.key) {
+                  console.log("true match")
+                  match = true;
+
+                  x.quantity += 1;
+                  newCart.push({"key": x.key, "quantity": x.quantity});
+                } else {
+                  console.log("false match")
+                  newCart.push({"key": x.key, "quantity": x.quantity});
+                }
+
+              });
+              if (!match) {
+                console.log("ADDING NEW ITEM");
+                newCart.push({"key": item.key, "quantity":1});
+
+              };
+              console.log("NEWCART", newCart);
+              setCart(newCart);
+
+              /*
+              if (user.cart.filter(x => x.key == item.key)) {
+                const existingItemInCart = user.cart.filter(x => x["key"] == item.key);
+                existingItemInCart["quantity"] == 2;
+                user.cart[item.key]
+                console.log(existingItemInCart);
+                console.log("ITEM HERE");
+                console.log(user.cart)
+              } else {
+                let newItem = {"key": item.key, "quantity": 1};
+                console.log(newItem);
+                console.log("ITEM NOT HERE");
+                console.log(user.cart)
+              }
+              */
+              /*
+              if (user.cart.includes(item.key)) {
+                newCart = user.cart.filter(elem => elem !== item.key);
+              } else {
+                newCart = user.cart.concat({"key": item.key, "quantity": 1});
+              }
+              console.log("NEWCART", newCart);
+              */
+
+              
+
+              const action = {
+                type: UPDATE_USER,
+                payload: {
+                  key: user.uid,
+                  displayName: user.displayName,
+                  cart: newCart,
+                  favorites: user.favorites
+                }
+              }
+
+              saveAndDispatch(action,dispatch)
+              
+            }}
+            >
+              Add to Cart
+          </Button>
 
           <TouchableOpacity
             onPress={() => {
@@ -84,13 +177,15 @@ function ProductDetailScreen({ navigation, route }) {
                 newFavorites = user.favorites.concat(item.key);
               }
               setFavoriteList(newFavorites)
+              console.log("NEWFAVORITES", newFavorites);
               
               const action = {
                 type: UPDATE_USER,
                 payload: {
                   key: user.uid,
                   displayName: user.displayName,
-                 favorites: newFavorites
+                  cart: user.cart,
+                  favorites: newFavorites
                 }
               }
 

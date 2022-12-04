@@ -53,19 +53,15 @@ const loadUsersAndDispatch = async (action, dispatch) => {
 const updateUserAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     console.log(payload,"db.js")
-    const { key, displayName, favorites} = payload;
+    const { key, displayName, favorites, cart} = payload;
     const docToUpdate = doc(collection(db, COLLNAME2), key);
     await updateDoc(docToUpdate, {
         displayName: displayName,
-       favorites: favorites
+       favorites: favorites,
+       cart: cart
 
     });
     dispatch(action);
-  
-
-
-
-
 
 }
 

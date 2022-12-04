@@ -34,7 +34,6 @@ function HomeScreen({navigation,route}) {
     }, []);
     const listItems = useSelector((state) => state.listItems);
     const dispatch = useDispatch();
-    console.log(listItems)
 
     return (
         <View style={styles.container}>
