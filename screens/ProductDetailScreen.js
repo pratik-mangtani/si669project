@@ -5,11 +5,17 @@ import { getApps, initializeApp } from 'firebase/app';
 import { onSnapshot, getFirestore, collection } from 'firebase/firestore';
 import { firebaseConfig } from '../Secret';
 import { useEffect, useState } from 'react';
+import { Card, Icon } from '@rneui/themed';
+import { saveAndDispatch } from '../data/DB';
+import { useSelector, useDispatch } from 'react-redux';
+import { UPDATE_USER } from '../data/Reducer';
+
+
 
 let app;
 const apps = getApps();
 
-if (apps.length == 0) { 
+if (apps.length == 0) {
   app = initializeApp(firebaseConfig);
 } else {
   app = apps[0];
@@ -18,78 +24,97 @@ if (apps.length == 0) {
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-function ProductDetailScreen({navigation}) {
-  const [displayName, setDisplayName] = useState('');
+function ProductDetailScreen({ navigation, route }) {
+  const { item } = route.params
+  
   //const [currentItem, setCurrentItem] = useState(auth.currentUser?.uid);
-  const [currentItem, setCurrentItem] = useState('4bT0e8GZVUgRzQq0jjGi');
-  const [users, setUsers] = useState([]);
-  const [favorite, setFavorite] = useState(0);
-  const [imageURL, setImageURL] = useState('');
-  const [favorited, setFavorited] = useState('0');
+  const [currentItem, setCurrentItem] = useState(item);
+ 
+ 
+  //const [imageURL, setImageURL] = useState('');
+  const [favorited, setFavorited] = useState(false);
 
-    // ♥
-  // ♡
+  const userId = "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
 
-  useEffect(()=>{
-    //console.log(currUserId);
+  const user = {
+    displayName: "Pratik Mangtani",
+    favorites: ["4bT0e8GZVUgRzQq0jjGi"],
+    uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
+  }
+  const [currentUser,setCurrentUser] = useState(user)
+  const [favoriteList, setFavoriteList] = useState(user.favorites);
+  const listItems = useSelector(state => state.listItems);
+  const dispatch = useDispatch();
+  console.log(listItems,"LISTITEMS")
 
-    onSnapshot(collection(db, 'furnitureCollection'), qSnap => {
-      let newUsers = [];
-      qSnap.forEach(docSnap => {
-        console.log(docSnap.id);
-        let newItem = docSnap.data();
-        newItem.key = docSnap.id;
-        newUsers.push(newItem);
-      });
-      console.log('currentItem:', currentItem)
-      console.log('updated users:', newUsers);
-      setUsers(newUsers);
-    })
-  }, []);
 
   return (
     <View style={styles.container}>
 
       <View>
         <Button onPress={async () => {
-            navigation.navigate('HomeScreen');
-          }}>
+          navigation.navigate('HomeScreen');
+        }}>
           Back
         </Button>
       </View>
-
       <View style={styles.listContainer}>
-        <FlatList
-          data={users.filter(u=>u.key==currentItem)}
-          renderItem={({item}) => {
-            {setImageURL(item.imageURL);}
-            return (
-                <View>
-                    <View style={styles.title}>
-                        <Text style={{fontSize: 24}}>{item.name}</Text>
-                    </View>
-                    <View style={styles.imageContainer}>
-                        <Image
-                        style={styles.image}
-                    source={{uri: imageURL}}/>
-                    {console.log('imageURL:')}
-                    {console.log(imageURL)}
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <Button style={styles.button}>Add to Cart</Button>
-                        
-                        <Button onPress={async () => { setFavorited('1'); if (favorited == '1') {setFavorited('0')} else {setFavorited('1') }}}> {favorited == '1' ? '♥' : '♡' }</Button>
-                    </View>
-                    <View style={styles.body}>
-                        <Text style={[{fontSize: 18}, {paddingTop:10}]}>Item Description</Text>
-                        <Text style={[{fontSize: 14}, {paddingTop:6}]}>{item.description}</Text>
-                        <Text style={[{fontSize: 18}, {paddingTop:10}]}>Price: ${item.price}</Text>
-                    </View>
-                </View>
-            );
-          }}
-        />
+        <View style={styles.title}>
+          <Text style={{ fontSize: 24 }}>{item.name}</Text>
+        </View>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={{ uri: item.imageURL }} />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button style={styles.button}>Add to Cart</Button>
+
+          <TouchableOpacity
+            onPress={() => {
+              // setCurrentUser( {
+              //   displayName: "Pratik Mangtani",
+              //   favorites: ["4bT0e8GZVUgRzQq0jjGi","HhCESIRbEIHGTQQyUqMA"],
+              //   uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
+              // })
+              let newFavorites = [];
+              if (user.favorites.includes(item.key)) {
+                newFavorites = user.favorites.filter(elem => elem !== item.key);
+              } else {
+                newFavorites = user.favorites.concat(item.key);
+              }
+              setFavoriteList(newFavorites)
+              
+              const action = {
+                type: UPDATE_USER,
+                payload: {
+                  key: user.uid,
+                  displayName: user.displayName,
+                 favorites: newFavorites
+                }
+              }
+
+              saveAndDispatch(action,dispatch)
+            }}>
+           
+            <Icon
+              //name={currentUser.favorites.includes(item.key) == true ? "heart" : "heart-o"}
+              name={favoriteList.includes(item.key) == true ? "heart" : "heart-o"}
+              type="font-awesome"
+              size={20} />
+
+
+
+          </TouchableOpacity>
+        </View>
+        <View style={styles.body}>
+          <Text style={[{ fontSize: 18 }, { paddingTop: 10 }]}>Item Description</Text>
+          <Text style={[{ fontSize: 14 }, { paddingTop: 6 }]}>{item.description}</Text>
+          <Text style={[{ fontSize: 18 }, { paddingTop: 10 }]}>Price: ${item.price}</Text>
+        </View>
       </View>
+
+
     </View>
   );
 }

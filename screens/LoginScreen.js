@@ -9,6 +9,7 @@ import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
 import { Button } from '@rneui/themed';
 import { firebaseConfig } from '../Secret';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let app;
 const apps = getApps();
@@ -84,6 +85,7 @@ function SignupBox({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+
 
   return (
     <View style={styles.loginContainer}>
@@ -162,7 +164,17 @@ function LoginScreen({navigation}) {
     onAuthStateChanged(auth, user => {
       if (user) {
         console.log('signed in! user:', user);
-        navigation.navigate('HomeScreen');
+        const storeData = async (value) => {
+          try {
+            const jsonValue = JSON.stringify(user)
+            await AsyncStorage.setItem('@user', jsonValue)
+          } catch (e) {
+            // saving error
+          }
+        }
+        navigation.navigate('HomeScreen',{
+          user :user
+        });
       } else {
         console.log('user is signed out!');
         navigation.navigate('Login');

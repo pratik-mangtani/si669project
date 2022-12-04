@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from "react";
-import { LOAD_ITEMS } from "../data/Reducer";
+import { LOAD_ITEMS,LOAD_USERS } from "../data/Reducer";
 import { useSelector, useDispatch } from "react-redux";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { saveAndDispatch } from "../data/DB";
@@ -13,14 +13,27 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 
-function HomeScreen({navigation}) {
-    const listItems = useSelector((state) => state.listItems);
-    const dispatch = useDispatch();
+function HomeScreen({navigation,route}) {
+    console.log(route,"route")
+    // const {user} = route.params
+    // const userId = user.uid
+
+   
+  
+    // console.log(userId,"USER ID")
+    // console.log(user,"HOME PAGE")
 
     useEffect(() => {
         const loadAction = { type: LOAD_ITEMS };
         saveAndDispatch(loadAction, dispatch);
     }, []);
+
+    useEffect(() => {
+        const loadAction = { type: LOAD_USERS };
+        saveAndDispatch(loadAction, dispatch);
+    }, []);
+    const listItems = useSelector((state) => state.listItems);
+    const dispatch = useDispatch();
     console.log(listItems)
 
     return (
@@ -45,7 +58,9 @@ function HomeScreen({navigation}) {
                             </Text>
                             <Button
                             onPress={async () => {
-                                navigation.navigate('ProductDetailScreen');
+                                navigation.navigate('ProductDetailScreen',{
+                                    item: item
+                                });
                             }}
                                 icon={<Icon name='code' color='#ffffff' />}
                                 buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
