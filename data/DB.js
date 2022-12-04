@@ -51,8 +51,9 @@ const loadUsersAndDispatch = async (action, dispatch) => {
 }
 
 const updateUserAndDispatch = async (action, dispatch) => {
+    console.log("in udate")
     const { payload } = action;
-    console.log(payload,"db.js")
+     console.log(payload,"db.js")
     const { key, displayName, favorites, cart} = payload;
     const docToUpdate = doc(collection(db, COLLNAME2), key);
     await updateDoc(docToUpdate, {
