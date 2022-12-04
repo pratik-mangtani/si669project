@@ -25,21 +25,38 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 function CartScreen({navigation}) {
-  const [displayName, setDisplayName] = useState('');
-  //const [currentItem, setCurrentItem] = useState(auth.currentUser?.uid);
-  const [currentItem, setCurrentItem] = useState('4bT0e8GZVUgRzQq0jjGi');
-  const [favorite, setFavorite] = useState(0);
-  const [imageURL, setImageURL] = useState('');
-  const [favorited, setFavorited] = useState('0');
+    //const [currentItem, setCurrentItem] = useState(auth.currentUser?.uid);
+    //const [currentItem, setCurrentItem] = useState(item);
+  
+  
+    const [imageURL, setImageURL] = useState('');
+    const [favorited, setFavorited] = useState(false);
 
-  const user = {
-    displayName: "Pratik Mangtani",
-    favorites: ["4bT0e8GZVUgRzQq0jjGi"],
-    uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
-  }
+    const userId = "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
 
-  const [currentUser,setCurrentUser] = useState(user)
-  const [favoriteList, setFavoriteList] = useState(user.favorites);
+    useEffect(() => {
+        const loadAction = { type: LOAD_USERS };
+        saveAndDispatch(loadAction, dispatch);
+    }, []);
+
+    const users = useSelector(state => state.users);
+
+    const currentUser = users.filter(elem => elem.key == userId)
+    console.log(currentUser[0],"CURRENT USER")
+
+
+
+    const user = {
+      displayName: "Pratik Mangtani",
+      favorites: ["4bT0e8GZVUgRzQq0jjGi"],
+      cart: [{"key":"4bT0e8GZVUgRzQq0jjGi", "quantity":1}],
+      uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
+    }
+    const [cart, setCart] = useState(currentUser[0]["cart"]);
+    const [favoriteList, setFavoriteList] = useState(user.favorites);
+    const listItems = useSelector(state => state.listItems);
+    const dispatch = useDispatch();
+    console.log(listItems,"LISTITEMS")
 
     // ♥
   // ♡
@@ -54,9 +71,6 @@ function CartScreen({navigation}) {
         const loadAction = { type: LOAD_USERS };
         saveAndDispatch(loadAction, dispatch);
     }, []);
-    const listItems = useSelector((state) => state.listItems);
-    const users = useSelector((state) => state.users);
-    const dispatch = useDispatch();
     console.log("LISTITEMS", listItems)
     console.log("LISTUSERS", users)
     // const filteredHomes = json.homes.filter(x => x.price <= 1000 && x.sqft >= 500 && x.num_of_beds >=2 && x.num_of_baths >= 2.5);
@@ -64,9 +78,10 @@ function CartScreen({navigation}) {
 
     const currentUserInfo = users.filter(x => x.uid == user.uid);
     //console.log("CURRENT_USER", filteredList);
-    console.log(currentUserInfo[0]['cart']);
+    //console.log(currentUserInfo[0]['cart']);
+    console.log(cart);
 
-
+  
   return (
     <View style={styles.container}>
 
@@ -75,15 +90,16 @@ function CartScreen({navigation}) {
             navigation.navigate('HomeScreen');
           }}>
           Back
-        </Button>2
+        </Button>
       </View>
       <View>
         <Text>Cart Screen</Text>
       </View>
 
       <View style={styles.listContainer}>
+        
         <FlatList
-          data = {currentUserInfo.cart}
+          data = {cart}
           renderItem={({item}) => {
             {setImageURL(item.imageURL);}
             return (
@@ -109,6 +125,7 @@ function CartScreen({navigation}) {
       </View>
     </View>
   );
+  
 }
 
 const styles = StyleSheet.create({

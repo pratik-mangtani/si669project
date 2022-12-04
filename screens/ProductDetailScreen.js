@@ -42,8 +42,8 @@ function ProductDetailScreen({ navigation, route }) {
 
   const users = useSelector(state => state.users);
 
-  console.log(users);
-  console.log()
+  const currentUser = users.filter(elem => elem.key == userId)
+  console.log(currentUser[0],"CURRENT USER")
 
 
 
@@ -53,8 +53,7 @@ function ProductDetailScreen({ navigation, route }) {
     cart: [{"key":"4bT0e8GZVUgRzQq0jjGi", "quantity":1}],
     uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
   }
-  const [currentUser,setCurrentUser] = useState(user);
-  const [cart, setCart] = useState(user.cart);
+  const [cart, setCart] = useState(currentUser[0]["cart"]);
   const [favoriteList, setFavoriteList] = useState(user.favorites);
   const listItems = useSelector(state => state.listItems);
   const dispatch = useDispatch();

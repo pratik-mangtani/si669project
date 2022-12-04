@@ -74,6 +74,7 @@ export default function Favourites() {
                       payload: {
                         key: currentUser[0].key,
                         displayName: currentUser[0].displayName,
+                        cart: currentUser[0].cart,
                        favorites: favListDispatch
                       }
                     }
