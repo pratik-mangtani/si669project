@@ -249,8 +249,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     flexDirection: 'row',
-
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'baseline',
+    margin: 10
   },
   button: {
     flexDirection: 'row',

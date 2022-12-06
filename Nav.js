@@ -14,6 +14,8 @@ import LoginScreen from './screens/LoginScreen';
 import AboutUs from './screens/AboutUs'
 import Navigation from './screens/Navigation'
 import CartScreen from './screens/CartScreen'
+import { Button, Overlay, Icon, Input, ButtonGroup, ThemeConsumer } from '@rneui/themed';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const store = configureStore({
     reducer: rootReducer, 
@@ -25,9 +27,34 @@ const store = configureStore({
     return (
       <Provider store={store}>
         <NavigationContainer>
-          <Tab.Navigator initialRouteName='Login'>
-            <Tab.Screen name="Login" component={LoginScreen}/>
+          <Tab.Navigator initialRouteName='Login'  screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'AboutUs') {
+              iconName = focused
+                ? 'ios-information-circle'
+                : 'ios-information-circle-outline';
+            } else if (route.name === 'HomeScreen') {
+              iconName = focused ? 'ios-home' : 'ios-home-outline';
+            } else if (route.name === 'AboutUs') {
+              iconName = focused ? 'ios-heart' : 'ios-heart-outline';
+            } 
+            else if (route.name === 'Favourites') {
+              iconName = focused ? 'ios-heart' : 'ios-heart-outline';
+            } else if (route.name === 'CartScreen') {
+              iconName = focused ? 'ios-cart' : 'ios-cart-outline';
+            } 
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'navy',
+          tabBarInactiveTintColor: 'gray',
+        })}>
+            {/* <Tab.Screen name="Login" component={LoginScreen}/> */}
             <Tab.Screen name='HomeScreen' component={HomeNavigator}/>
+             
             <Tab.Screen name='Favourites' component={Favourites}/>
             <Tab.Screen name='AboutUs' component={AboutUsNavigator}/>
             <Tab.Screen name='CartScreen' component={CartScreen}/>

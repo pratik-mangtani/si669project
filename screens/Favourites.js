@@ -35,13 +35,13 @@ export default function Favourites() {
   const favorites = listItems.filter(elem => currentUser[0].favorites.includes(elem.key))
   console.log(favorites, "FAVORITES")
   const [favoriteList, setFavoriteList] = useState(favorites);
-
+  
   
   return (
     <View style={styles.container}>
       <View>
         <FlatList
-          data={favoriteList}
+          data={favorites}
           renderItem={({ item }) => {
             return (
               // <HomeCard item={item}  />
@@ -55,10 +55,10 @@ export default function Favourites() {
 
 
                 <View style={styles.cardBottom}>
-                  <Text style={{ marginBottom: 10 }}>
+                  <Text style={{ marginBottom: 10, fontSize: 16}}>
                     {item.price}
                   </Text>
-                  <TouchableOpacity
+                  <TouchableOpacity style={styles.buttons}
                     onPress={() => {
                      const newFavorites = favoriteList.filter(elem=> elem.key !=item.key
                      )//get only id 
@@ -81,7 +81,7 @@ export default function Favourites() {
       
                     saveAndDispatch(action,dispatch)
                     }}>
-                    <Icon
+                    <Icon 
                       name="heart"
                       type="font-awesome"
                       size={20} />
@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
   cardBottom: {
     flexDirection: 'row',
     flex: 0.3,
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    marginTop: 10
 
   }
+
 });

@@ -8,12 +8,12 @@ import {
 } from 'expo-location';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { GOOGLE_API_KEY } from '../Secret';
-import { FlatList } from 'react-native';
+import { FlatList, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
 
 
-export default function AboutUs({navigation}) {
+export default function AboutUs({ navigation }) {
 
     const initRegion = {
         latitude: 37.78825,
@@ -42,7 +42,7 @@ export default function AboutUs({navigation}) {
 
         let response = await fetch(placesURI);
         let results = await response.json();
-       
+
 
         let newPlaces = [];
         for (let r of results.results) {
@@ -90,7 +90,7 @@ export default function AboutUs({navigation}) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.paragraph}>
+            {/* <Text style={styles.paragraph}>
                 {permissionsGranted ?
                     location ?
                         `lat: ${location.coords.latitude} \n` +
@@ -100,9 +100,22 @@ export default function AboutUs({navigation}) {
                     :
                     "Location permission not granted."
                 }
+            </Text> */}
+            <View style={styles.intro}>
+            <Text style={styles.paragraph}>
+                We are recognized as a market leader in the quality, design, and engineering of contract furniture products, focusing on a wide range of markets and designs.
+
             </Text>
+            {/* <Image style={{objectFit: "scale-down", width: 400, height: 200 }} source={{uri: "https://img.freepik.com/premium-vector/creative-furniture-icon-logo-design-premium-vector_526458-268.jpg?w=2000"}}/> */}
 
 
+            </View>
+            
+
+            <Button
+                title="Locate Us"
+                onPress={searchLocations}
+            />
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
@@ -120,32 +133,29 @@ export default function AboutUs({navigation}) {
                 })}
             </MapView>
 
-            <Button
-                title="Search for Restaurants"
-                onPress={searchLocations}
-            />
-
-
-          <View
-          style={styles.list}>
           
-                    <FlatList
-                        data={places}
-                        renderItem={({ item }) => {
-                            return (
-                                <TouchableOpacity  onPress={() => {
-                                    navigation.navigate('Navigation',item);
-                                }}>
-                                        <Text>{item.name}</Text>
-                                </TouchableOpacity>
-                                
-                               
-                            );
-                        }}
-                    />
-                
-          </View>
-               
+
+
+            <View
+                style={styles.list}>
+
+                <FlatList
+                    data={places}
+                    renderItem={({ item }) => {
+                        return (
+                            <TouchableOpacity style={styles.locations} onPress={() => {
+                                navigation.navigate('Navigation', item);
+                            }}>
+                                <Text style={{color: "#00274C"}}>{item.name}</Text>
+                            </TouchableOpacity>
+
+
+                        );
+                    }}
+                />
+
+            </View>
+
         </View>
     );
 }
@@ -157,7 +167,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     paragraph: {
-        fontSize: 24
+        fontSize: 16,
+        margin: 10
     },
 
     map: {
@@ -165,8 +176,23 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%'
     },
-    list:{
+    list: {
         flex: 0.5,
-      
+        margin: 10
+
+    },
+    intro:{
+        display: 'flex',
+        flexDirection: "row",
+        flex: 0.2,
+        margin: 10
+    },
+    locations:{
+        borderWidth: 2,
+        borderRadius: 3,
+        backgroundColor: "#FFCB05",
+        margin: 3,
+        padding: 3
+        
     }
 })
