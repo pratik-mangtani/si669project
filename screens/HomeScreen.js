@@ -47,13 +47,12 @@ function HomeScreen({navigation,route}) {
                         <Card>
                             <Card.Title>{item.name}</Card.Title>
                             <Card.Divider />
-                             <Card.Image style={{objectFit: "contain"}} source={item.imageURL} /> 
-                             <Image style={{objectFit: "contain", width: 200, height: 200 }}source={{uri: item.imageURL}} />
+                             <Image style={{objectFit: "contain", width: 340, height: 200 }}source={{uri: item.imageURL}} />
                             <Text style={{ marginBottom: 10 }}>
                                 {item.description}
                             </Text>
-                            <Text style={{ marginBottom: 10 }}>
-                                {item.price}
+                            <Text style={{ marginBottom: 10,fontWeight:"bold" }}>
+                                {item.price}/-
                             </Text>
                             <Button
                             onPress={async () => {
@@ -61,7 +60,7 @@ function HomeScreen({navigation,route}) {
                                     item: item
                                 });
                             }}
-                                icon={<Icon name='code' color='#ffffff' />}
+                                // icon={<Icon name='code' color='#ffffff' />}
                                 buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0 }}
                                 title='VIEW NOW' />
                                 
