@@ -35,13 +35,13 @@ export default function Favourites() {
   const favorites = listItems.filter(elem => currentUser[0].favorites.includes(elem.key))
   console.log(favorites, "FAVORITES")
   const [favoriteList, setFavoriteList] = useState(favorites);
-
+  //setFavoriteList(favorites)
   
   return (
     <View style={styles.container}>
       <View>
         <FlatList
-          data={favoriteList}
+          data={favorites}
           renderItem={({ item }) => {
             return (
               // <HomeCard item={item}  />
