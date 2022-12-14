@@ -23,6 +23,13 @@ function HomeScreen({navigation,route}) {
     // console.log(userId,"USER ID")
     // console.log(user,"HOME PAGE")
 
+    const user = {
+        displayName: "Pratik Mangtani",
+        favorites: ["4bT0e8GZVUgRzQq0jjGi"],
+        cart: [{"key":"4bT0e8GZVUgRzQq0jjGi", "quantity":1}],
+        uid: "oFA21EeUbvSj2MyHOxnuOk3c6NE2"
+      }
+
     useEffect(() => {
         const loadAction = { type: LOAD_ITEMS };
         saveAndDispatch(loadAction, dispatch);
@@ -37,13 +44,15 @@ function HomeScreen({navigation,route}) {
 
     return (
         <View style={styles.container}>
+            <Text style={{ fontSize: 12, width: '100%', textAlign: 'right', paddingTop: 5, paddingRight: 5 }}>User: {user.displayName}</Text>
             <FlatList
                 data={listItems}
                 renderItem={({ item }) => {
                     return (
                         // <HomeCard item={item}  />
-                      
+                        
 
+                
                         <Card>
                             <Card.Title>{item.name}</Card.Title>
                             <Card.Divider />

@@ -27,10 +27,12 @@ const store = configureStore({
     return (
       <Provider store={store}>
         <NavigationContainer>
-          <Tab.Navigator initialRouteName='Login'  screenOptions={({ route }) => ({
+          <Tab.Navigator initialRouteName='LoginScreen'  screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-
+            if (route.name === 'LoginScreen') {
+              iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
+            }
             if (route.name === 'AboutUs') {
               iconName = focused
                 ? 'ios-information-circle'
@@ -52,9 +54,9 @@ const store = configureStore({
           tabBarActiveTintColor: 'navy',
           tabBarInactiveTintColor: 'gray',
         })}>
-            {/* <Tab.Screen name="Login" component={LoginScreen}/> */}
+           <Tab.Screen name="LoginScreen" component={LoginScreen}/>
             <Tab.Screen name='HomeScreen' component={HomeNavigator}/>
-             
+            {/*<Tab.Screen name="LoginScreen" component={LoginScreen}/>*/}
             <Tab.Screen name='Favourites' component={Favourites}/>
             <Tab.Screen name='AboutUs' component={AboutUsNavigator}/>
             <Tab.Screen name='CartScreen' component={CartScreen}/>
@@ -63,6 +65,7 @@ const store = configureStore({
       </Provider>
     )
   }
+
 
   function AboutUsNavigator(){
     const Stack = createNativeStackNavigator()

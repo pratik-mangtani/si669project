@@ -30,7 +30,9 @@ function SigninBox({navigation}) {
 
   return (
     <View style={styles.loginContainer}>
-      <Text style={{fontWeight: '800', fontSize: '20'}}>Sign In</Text>
+      <View style={styles.loginTitle}>
+        <Text style={{fontWeight: '600', fontSize: '16'}}>Sign In</Text>
+      </View>
       <View style={styles.loginRow}>
         <View style={styles.loginLabelContainer}>
           <Text style={styles.loginLabelText}>Email: </Text>
@@ -42,7 +44,7 @@ function SigninBox({navigation}) {
             autoCapitalize='none'
             spellCheck={false}
             onChangeText={text=>setEmail(text)}
-            value={email}
+            value={ email }
           />
         </View>
       </View>
@@ -64,7 +66,6 @@ function SigninBox({navigation}) {
       </View>
       <View style={styles.loginRow}>
         <Button
-        color="#000000"
           onPress={async () => {
             try {
               await signInWithEmailAndPassword(auth, email, password);
@@ -74,7 +75,7 @@ function SigninBox({navigation}) {
             }
           }}
         >
-          Sign In
+          SIGN IN
         </Button>  
       </View>
     </View>
@@ -89,7 +90,9 @@ function SignupBox({navigation}) {
 
   return (
     <View style={styles.loginContainer}>
-      <Text style={{fontWeight: '800', fontSize: '20'}}>Sign Up</Text>
+      <View style={styles.loginTitle}>
+        <Text style={{fontWeight: '600', fontSize: '16'}}>Sign Up</Text>
+      </View>
       <View style={styles.loginRow}>
         <View style={styles.loginLabelContainer}>
           <Text style={styles.loginLabelText}>Display Name: </Text>
@@ -139,7 +142,6 @@ function SignupBox({navigation}) {
       </View>
       <View style={styles.loginRow}>
         <Button
-          color="#000000"
           onPress={async () => {
             try {
               const userCred = await createUserWithEmailAndPassword(auth, email, password);
@@ -149,7 +151,7 @@ function SignupBox({navigation}) {
             }
           }}
         >
-          Sign Up
+          SIGN UP
         </Button>  
       </View>
     </View>
@@ -221,18 +223,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'left',
     justifyContent: 'flex-start',
+    paddingLeft: 10,
+    paddingTop: 0
   },
   bodyContainer: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'left',
+    color: 'grey',
     //backgroundColor: 'tan'
+  },
+  loginTitle: {
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   loginContainer: {
     justifyContent: 'flex-start',
     alignItems: 'left',
     width: '100%',
-    paddingTop: 25,
     //paddingBottom: '10%',
     //backgroundColor: 'lightblue'
   },
@@ -244,7 +252,7 @@ const styles = StyleSheet.create({
     //backgroundColor: 'tan'
   },
   loginHeaderText: {
-    color: 'black',
+    color: 'grey',
     paddingBottom: '5%'
   },
   loginRow: {
@@ -252,6 +260,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'left',
     width: '100%',
+
     //backgroundColor: 'pink'
   },
   loginLabelContainer: {
@@ -260,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex'
   },
   loginLabelText: {
-    fontSize: 18
+    fontSize: 12
   },
   loginInputContainer: {
     flex: 0.5,

@@ -41,7 +41,7 @@ export default function Favourites() {
     <View style={styles.container}>
       <View>
         <FlatList
-          data={favoriteList}
+          data={favorites}
           renderItem={({ item }) => {
             return (
               // <HomeCard item={item}  />
